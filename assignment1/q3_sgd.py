@@ -85,7 +85,11 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
 
         cost = None
         ### YOUR CODE HERE
-        raise NotImplementedError
+        cost, dx = f(x)
+
+        x -= step * dx
+        if postprocessing:
+            x = postprocessing(x)
         ### END YOUR CODE
 
         if iter % PRINT_EVERY == 0:
