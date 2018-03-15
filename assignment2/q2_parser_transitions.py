@@ -35,8 +35,6 @@ class PartialParse(object):
                         transition.
         """
         ### YOUR CODE HERE
-        print self.buffer
-        print self.stack
         if transition == 'S':
             w = self.buffer.pop(0)
             self.stack.append(w)

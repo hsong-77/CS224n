@@ -7,7 +7,6 @@ from model import Model
 from q2_initialization import xavier_weight_init
 from utils.parser_utils import minibatches, load_and_preprocess_data
 
-
 class Config(object):
     """Holds model hyperparams and data information.
 
@@ -56,7 +55,7 @@ class ParserModel(Model):
         ### YOUR CODE HERE
         self.input_placeholder = tf.placeholder(tf.int32, (None, self.config.n_features))
         self.labels_placeholder = tf.placeholder(tf.float32, (None, self.config.n_classes))
-        self.dropout_placeholder = tf.placeholder(tf.float32, [])
+        self.dropout_placeholder = tf.placeholder(tf.float32)
         ### END YOUR CODE
 
     def create_feed_dict(self, inputs_batch, labels_batch=None, dropout=0):
@@ -108,8 +107,8 @@ class ParserModel(Model):
         """
         ### YOUR CODE HERE
         embedded = tf.Variable(self.pretrained_embeddings)
-        embedding = tf.nn.embedding_lookup(embedded, self.input_placeholder)
-        embeddings = tf.reshape(embedding, [-1, self.config.n_features * self.config.embed_size])
+        embeddings = tf.nn.embedding_lookup(embedded, self.input_placeholder)
+        embeddings = tf.reshape(embeddings, [-1, self.config.n_features * self.config.embed_size])
         ### END YOUR CODE
         return embeddings
 
@@ -143,7 +142,7 @@ class ParserModel(Model):
         b2 = tf.Variable(tf.zeros(self.config.n_classes))
 
         h = tf.nn.relu(tf.matmul(x, W) + b1)
-        h_drop = tf.nn.dropout(h, self.dropout_placeholder)
+        h_drop = tf.nn.dropout(h, 1 - self.dropout_placeholder)
         pred = tf.matmul(h_drop, U) + b2
         ### END YOUR CODE
         return pred
